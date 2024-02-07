@@ -83,6 +83,37 @@ def insertListing():
 
             print(err)
             return jsonify ({"Message": "Error"}), 500
+       
+@app.route('/updatelisting/<int:travelID>', methods=['PUT'])
+@login_required
+def updateListing(travelID): #dateInserted
+    
+    print(g.role)
+    print(g.userid)
+
+    if g.role!="admin":
+        return jsonify({"Message":"You are not authorized"}),401
+
+    try:
+        #retrieve req data
+        listingJSON=request.json
+
+        title = listingJSON ['title']
+        description = listingJSON ['description']
+        price = listingJSON ['price']
+        country = listingJSON ['country']
+        travelPeriod = listingJSON ['travel_period']
+        imageURL = listingJSON ['imageURL']
+        
+        #call model 
+        recs=Listing.updateListing(title, description, price, country, travelPeriod, imageURL, travelID) #dateInserted
+
+        return jsonify(recs),200
+
+    except Exception as err:
+
+        print(err)
+        return jsonify({"Message":"Error"}),500
 
 if __name__ == "__main__":
     app.run(debug=True)
