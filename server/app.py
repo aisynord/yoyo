@@ -36,6 +36,8 @@ def registerNewUser():
      except Exception as err:
           print(err)
           return jsonify({"Message":"Error"}),500
+     
+
 
 if __name__ == "__main__":
     app.run(debug=True)
