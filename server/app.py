@@ -37,5 +37,25 @@ def registerNewUser():
           print(err)
           return jsonify({"Message":"Error"}),500
 
+@app.route('/login',methods=["POST"])
+def loginUser():
+    try:
+        # Retrieve request data
+        admin_json = request.json
+        email = admin_json['email']
+        password = admin_json['password']
+
+        if not email or not password:
+            return jsonify({"message": "Email and password are required"}), 400
+        
+        #Call the login method
+        result = User.login(email, password)
+
+        return jsonify(result), 200
+
+    except Exception as err:
+        print(err)
+        return jsonify({"Message": "Error"}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
