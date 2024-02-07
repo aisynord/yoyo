@@ -36,6 +36,8 @@ def registerNewUser():
      except Exception as err:
           print(err)
           return jsonify({"Message":"Error"}),500
+     
+
 
 @app.route('/login',methods=["POST"])
 def loginUser():
