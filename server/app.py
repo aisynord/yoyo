@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_cors import CORS
-# from model.listing import Listing
+from model.listing import Listing
 from model.User import User
 from validation.Authorisation import *
 
@@ -58,6 +58,31 @@ def loginUser():
     except Exception as err:
         print(err)
         return jsonify({"Message": "Error"}), 500
+
+@app.route('/travel', methods=["POST"])
+@login_required
+def insertListing():
+
+    try:
+            # retrieve required data
+            travelJSON=request.json
+            title=travelJSON['title']
+            description=travelJSON['description']
+            price=travelJSON['price']
+            country=travelJSON['country']
+            travelPeriod=travelJSON['travel_period']
+            imageURL=travelJSON['imageURL']
+
+            #call model
+            recs=Listing.insertListing(title, description, price, country, travelPeriod,imageURL)
+
+            msg=str(recs)+" record(s) inserted"
+            return jsonify({"message":msg}),201
+
+    except Exception as err:
+
+            print(err)
+            return jsonify ({"Message": "Error"}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
